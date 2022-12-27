@@ -35,7 +35,7 @@ class SheetManager:
                     row_data = [no, str(date_time), str(command), float(price), str(description), float(balance), str(diff)]
                     self.format_color(self.start_index, command)
                     self.sheet.insert_row(row_data, self.start_index)
-                    return "บันทึกรายการที่ " + str(no) + "สำเร็จ"
+                    return "บันทึกรายการที่ " + str(no) + " สำเร็จ"
                 case "จ่าย":
                     return "จะต้องบันทึกรายการแรกของคุณด้วยคำสั่ง รับ เพื่อระบุเงินตั้งต้น"
         else:
@@ -54,7 +54,7 @@ class SheetManager:
             row_data = [no, str(date_time), str(command), float(price), str(description), float(balance), str(diff)]
             self.format_color(index, command)
             self.sheet.insert_row(row_data, index)
-            return "บันทึกรายการที่ " + str(no) + "สำเร็จ"
+            return "บันทึกรายการที่ " + str(no) + " สำเร็จ"
         
     def format_color(self, index, command):
         text_center_cell_range = "A$:G$".replace("$", str(index))
