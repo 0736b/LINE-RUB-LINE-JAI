@@ -127,3 +127,7 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+your_private_key.json
+dump.txt
+dump.py
