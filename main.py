@@ -1,5 +1,4 @@
 from flask import Flask, request, abort
-
 from linebot import (
     LineBotApi, WebhookHandler
 )
@@ -11,6 +10,7 @@ from linebot.models import (
 )
 
 from dotenv import dotenv_values
+from datetime import datetime
 
 config = dotenv_values(".env")
 
@@ -41,24 +41,39 @@ def callback():
 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-    user_text = ""
-    reply_text = ""
+    
+    date_time = str(datetime.fromtimestamp(round(event.timestamp / 1000)))
+    date = date_time.split(" ")[0]
+    time = date_time.split(" ")[1]
+    
     if event.message.type == "text":
+        
+        reply_text = ""
         user_text = event.message.text
         user_text_splitted = user_text.split(" ")
+        
         if len(user_text_splitted) == 3:
+            
+            try:
+                float(user_text_splitted[1])
+            except:
+                error_msg = "จำนวนเงินไม่ถูกต้อง โปรดพิมพ์ใหม่"
+                line_bot_api.reply_message(event.reply_token, TextSendMessage(text=error_msg))
+                
             command = user_text_splitted[0]
             price = round(float(user_text_splitted[1]),2)
             description = user_text_splitted[2]
+            
             match command:
                 case "รับ":
-                    reply_text = "คุณได้รับเงินจำนวน " + str(price) + ' บาท จาก ' + description
+                    reply_text = "เมื่อ " + date + " เวลา " + time + "\nคุณได้รับเงินจำนวน " + str(price) + ' บาท\nจาก ' + description
                 case "จ่าย":
-                    reply_text = "คุณได้จ่ายเงินจำนวน " + str(price) + ' บาท ค่า ' + description
-            line_bot_api.reply_message(event.reply_token, TextSendMessage(text=reply_text))
+                    reply_text = "เมื่อ " + date + " เวลา " + time + "\nคุณได้จ่ายเงินจำนวน " + str(price) + ' บาท\nค่า ' + description
+                    
         else:
-            reply_text = "ควรขึ้นต้นด้วยคำว่า รับ หรือ จ่าย เช่น รับ 3000 เงินรายเดือน หรือ จ่าย 50 ผัดกระเพรา"
-            line_bot_api.reply_message(event.reply_token, TextSendMessage(text=reply_text))
+            reply_text = "คำสั่งขึ้นต้นด้วยคำว่า รับ หรือ จ่าย เช่น\nรับ 3000 เงินรายเดือน\nหรือ\nจ่าย 50 ผัดกระเพรา"
+            
+        line_bot_api.reply_message(event.reply_token, TextSendMessage(text=reply_text))
 
 
 if __name__ == "__main__":
