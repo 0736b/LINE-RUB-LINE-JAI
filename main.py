@@ -69,6 +69,10 @@ def handle_message(event):
                     reply_text += "\n" + status
         line_bot_api.reply_message(event.reply_token, TextSendMessage(text=reply_text))
 
+@app.route("/")
+def home():
+    return "LINE-RUB-LINE-JAI Chatbot"
+
 
 if __name__ == "__main__":
     app.run()
