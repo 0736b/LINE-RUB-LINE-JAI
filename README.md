@@ -21,3 +21,10 @@ Typing command to LINE chatbot
 - `pip install requirements.txt`
 - create `.env` file and put your key from LINE and Google like `.env.example`
 - `python main.py`
+
+#### Deploy on render.com
+- new "Web Service" and paste this repo link.
+- environment add variable key `PYTHON_VERSION` value `3.11.0`
+- add secret file with filename `.env` and paste your content in `.env` file.
+- build command: `pip install -r requirements.txt`
+- start command: `gunicorn main:app`
